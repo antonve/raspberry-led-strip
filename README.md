@@ -5,6 +5,8 @@ NMCT Data Communication project: talking to a LED strip with the Raspberry Pi
 
 ## Week 1
 
+![De Raspberry Pi, met ingeplugd de ribbon cable, voeding, toetsenbord en HDMI-kabel](board-setup.jpg)
+
 Tijdens de eerste week hebben we de Raspberry Pi opgezet en klaargemaakt. We hebben de [Raspbian](http://www.raspbian.org/) image afgehaald van de [downloadpagina](http://www.raspberrypi.org/downloads/). Unzippen en een `sudo dd bs=4M if~/2015-02-16-wheezy-raspbian.img of=/dev/sdc` later stond Raspbian op het SD-kaartje. Voor de eerste boot verbonden we de Raspberry Pi met een scherm (over HDMI) en een toetsenbord. Veel hebben we niet veranderd bij de installatie, behalve dan het expanden van de image zodat het volledige kaartje gebruikt wordt.
 
 Na het rebooten staken we een netwerkkabel in. We voegden `allow-hotplug eth0` en `auto eth0` toe aan `/etc/network/interfaces` en restartten de networkingservice met `sudo service networking restart`. Dat zorgt ervoor dat we de netwerkkabel mogen uittrekken naar believen, Raspbian zal proberen opnieuw te verbinden wanneer hij opnieuw wordt ingestoken.
