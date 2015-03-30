@@ -7,7 +7,7 @@ NMCT Data Communication project: talking to a LED strip with the Raspberry Pi
 
 ![De Raspberry Pi, met ingeplugd de ribbon cable, voeding, toetsenbord en HDMI-kabel](board-setup.jpg)
 
-Tijdens de eerste week hebben we de Raspberry Pi opgezet en klaargemaakt. We hebben de [Raspbian](http://www.raspbian.org/) image afgehaald van de [downloadpagina](http://www.raspberrypi.org/downloads/). Unzippen en een `sudo dd bs=4M if~/2015-02-16-wheezy-raspbian.img of=/dev/sdc` later stond Raspbian op het SD-kaartje. Voor de eerste boot verbonden we de Raspberry Pi met een scherm (over HDMI) en een toetsenbord. Veel hebben we niet veranderd bij de installatie, behalve dan het expanden van de image zodat het volledige kaartje gebruikt wordt.
+Tijdens de eerste week hebben we de Raspberry Pi opgezet en klaargemaakt. We hebben de [Raspbian](http://www.raspbian.org/) image afgehaald van de [downloadpagina](http://www.raspberrypi.org/downloads/). Unzippen en een `sudo dd bs=4M if~/2015-02-16-wheezy-raspbian.img of=/dev/sdc` later stond Raspbian op het SD-kaartje. Voor de eerste boot verbonden we de Raspberry Pi met een scherm (over HDMI) en een toetsenbord. Veel hebben we niet veranderd bij de installatie, behalve dan het expanden van de image zodat het volledige kaartje gebruikt wordt, en het enablen van de SPI en I2C kernel modules.
 
 Na het rebooten staken we een netwerkkabel in. We voegden `allow-hotplug eth0` en `auto eth0` toe aan `/etc/network/interfaces` en restartten de networkingservice met `sudo service networking restart`. Dat zorgt ervoor dat we de netwerkkabel mogen uittrekken naar believen, Raspbian zal proberen opnieuw te verbinden wanneer hij opnieuw wordt ingestoken.
 
@@ -76,6 +76,8 @@ GPIO.output(4, 1)             # zet pin 4 hoog
 ### Aansturen van de LED-strip
 
 ## Week 2
+
+Deze week willen we het aansturen van de LEDs goed krijgen. We moeten continu blijven sturen: de eerste byte zet het rood van de eerste LED, de tweede byte het groen van de eeste LED, de derde byte het blauw van de eerste LED, de vierde byte het rood van de tweede LED, enzovoort. Per LED moeten er dus 24 bits (3 bytes) verstuurd worden. Er moet een pauze van meer dan 500us tussen de verschillende dataframes zitten.
 
 ## Week 3
 

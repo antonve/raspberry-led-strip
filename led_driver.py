@@ -43,3 +43,27 @@ def write_colors(colors):
     for color in colors:
         write_rgb(color[0], color[1], color[2])
 
+def turn_off():
+    write_color_to_all([0,0,0])
+
+def turn_all_white():
+    write_color_to_all([255, 255, 255])
+
+def write_color_to_all(color):
+    write_colors([color] * 10)
+
+def turn_all_red():
+    write_color_to_all([255, 0, 0])
+
+def turn_all_green():
+    write_color_to_all([0, 255, 0])
+
+def turn_all_blue():
+    write_color_to_all([0, 0, 255])
+
+def turn_all_to_same_random():
+    write_color_to_all(random_color())
+
+def random_color():
+    return [random.randrange(0,255), random.randrange(0,255), random.randrange(0,255)]
+
