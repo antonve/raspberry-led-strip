@@ -79,7 +79,28 @@ GPIO.output(4, 1)             # zet pin 4 hoog
 
 Deze week willen we het aansturen van de LEDs goed krijgen. We moeten continu blijven sturen: de eerste byte zet het rood van de eerste LED, de tweede byte het groen van de eeste LED, de derde byte het blauw van de eerste LED, de vierde byte het rood van de tweede LED, enzovoort. Per LED moeten er dus 24 bits (3 bytes) verstuurd worden. Er moet een pauze van meer dan 500us tussen de verschillende dataframes zitten.
 
+We hebben ook de datasheet van de LED-strip beter bekeken. Hij staat nu [hier](https://drive.google.com/file/d/0B4tGyX3W5HcWVm5PeUJmOElaYTA/view?usp=sharing), maar ook [Adafruit](http://www.adafruit.com/datasheets/WS2801.pdf) heeft hem staan. We vonden de datasheet redelijk verwarrend en onduidelijk, maar dat komt waarschijnlijk omdat we daar niet zo veel ervaring mee hebben.
+
+Deze week hebben we zelf een "driver" geschreven om de LEDstrip aan te sturen. Dat deden we in Python. Het is een simpele library, `led_driver.py`, met kleine functies en enkele constanten die de vaste pinnen voorstellen.
+
+De basis is `write_data`, een functie die een enkele bit aan informatie stuurt. Dat wordt gedaan door eerst de klokpin laag te zetten, dan de data naar de datapin te schrijven en uiteindelijk de klokpin terug hoog te zetten.
+
+Daarnaast zijn nog enkele andere functies voorzien:
+
+* `write_byte` schrijft een volledige byte naar de Raspberry Pi
+* `int_to_bit_array` maakt van een getal tussen 0 en 255 een array van bits
+* `write_rgb(red, green, blue)` schrijft een kleur weg, de kleuren moeten getallen tussen 0 en 255 zijn
+* `write_colors(colors)` schrijft een array van tien elementen weg. De elementen van deze array zijn opnieuw arrays in de vorm `[red, green, blue]`
+* `random_color` maakt een willekeurige kleur (geeft een array van 3 getallen tussen 0 en 255 terug)
+* `turn_off`, `turn_all_white`, `write_color_to_all(color)`, `turn_all_red`, `turn_all_green`, `turn_all_blue` en `turn_all_to_same_random` doen exact wat je verwacht
+
+Om deze library te gebruiken, doe je `sudo python` en dan `import led_driver` (als die in dezelfde map staat).
+
 ## Week 3
+
+In week 3 hebben we gepoogd om een Python daemon op te zetten. De daemon bindt een poort (10000), accepteert alle requests en probeert ze te converteren naar iets dat kan getoond worden op de LEDstrip.
+
+Dat werkte, maar we hadden veel problemen. De LEDstrip update niet altijd alle kleuren. 
 
 ## Week 4
 
