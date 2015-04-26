@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-import led_driver
+#import led_driver
 import socket
 import sys
+
+led_state = [ [[0, 0, 0], [0, 0, 0], [0, 0, 0]] for i in range(0, 10)]
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,25 +15,30 @@ print >>sys.stderr, 'starting up on %s port %s' % server_address
 sock.bind(server_address)
 
 # Turns a list into a list of lists where the nested lists have length n
-# see http://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-eve
-nly-sized-chunks-in-python
+# see http://stackoverflow.com/questions/312443/how-do-you-split-a-list-into-evenly-sized-chunks-in-python
 def chunks(l, n):
-    """ Yield successive n-sized chunks from l.
-    """
+    """ Yield successive n-sized chunks from l."""
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
 def write_to_led_strip(data):
+    global led_state
     if(len(data) >= 60):
         try:
             toWrite = [[int(elem[0:2], 16), int(elem[2:4], 16), int(elem[4:6], 16)] for elem in list(chunks(data, 6))]
             print "sending to LED strip %s" % toWrite
             led_driver.write_colors(toWrite)
+            led_state = toWrite
             return list
         except ValueError, e:
             return []
     else:
-         print "not enough characters"
+        if data.startswith("status?"):
+            # send status
+            connection.sendall(str(led_state))
+            return "finished"
+        else:
+            print "not enough characters (got %s)" % data
 
 # Listen for incoming connections
 sock.listen(1)
@@ -48,9 +55,9 @@ while True:
             data = connection.recv(60)
             print >>sys.stderr, 'received "%s"' % data
             if data:
-                print >>sys.stderr, 'sending data back to the client'
-                connection.sendall(data)
-                write_to_led_strip(data)
+                if write_to_led_strip(data) is 'finished':
+                    connection.close()
+                    break
             else:
                 print >>sys.stderr, 'no more data from', client_address
                 break
