@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-#import led_driver
+import led_driver
 import socket
 import sys
+import os
 
 led_state = [ [[0, 0, 0], [0, 0, 0], [0, 0, 0]] for i in range(0, 10)]
 
@@ -21,13 +22,18 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
+# arr is an array [ [red, green, blue] * 10 ]
+def build_command(arr):
+    return "./led_driver/led_driver 10 " + " ".join(map(lambda rgb: '0x%02x%02x%02x' % tuple(rgb), arr))
+
 def write_to_led_strip(data):
     global led_state
     if(len(data) >= 60):
         try:
             toWrite = [[int(elem[0:2], 16), int(elem[2:4], 16), int(elem[4:6], 16)] for elem in list(chunks(data, 6))]
             print "sending to LED strip %s" % toWrite
-            led_driver.write_colors(toWrite)
+            os.system(build_command(toWrite))
+            #led_driver.write_colors(toWrite)
             led_state = toWrite
             return list
         except ValueError, e:
