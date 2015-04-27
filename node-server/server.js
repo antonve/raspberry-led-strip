@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // serve static front-end
 app.use(express.static('public'));
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 80;
 
 
 var router = express.Router();
