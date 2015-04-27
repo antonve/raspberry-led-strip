@@ -1,0 +1,23 @@
+{
+  "name": "raspberry-pi-ledstrip-api",
+  "version": "1.0.0",
+  "description": "https://github.com/thomastoye/raspberry-led-strip",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomastoye/raspberry-led-strip"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomastoye/raspberry-led-strip/issues"
+  },
+  "homepage": "https://github.com/thomastoye/raspberry-led-strip",
+  "dependencies": {
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3"
+  }
+}
