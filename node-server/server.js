@@ -8,6 +8,9 @@ var net = require('net');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// serve static front-end
+app.use(express.static('public'));
+
 var port = process.env.PORT || 8080;
 
 
