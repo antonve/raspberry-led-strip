@@ -13,10 +13,6 @@ var port = process.env.PORT || 8080;
 
 var router = express.Router();
 
-router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
-});
-
 router.get('/status', function(req, res) {
     // request status from Python server
     var socket = net.Socket();
@@ -32,7 +28,7 @@ router.get('/status', function(req, res) {
     socket.write('status?');
         
     // parse and write out response when Python server finished sending
-    socket.on('close', function() { res.json({ data: data }) });
+    socket.on('close', function() { res.json({ data: JSON.parse(data) }) });
 });
 
 router.post('/status', function(req, res) {
@@ -55,7 +51,7 @@ router.post('/status', function(req, res) {
     }
 
     try {
-      var parsed = JSON.parse(newStatus);
+      var parsed = (JSON.parse(newStatus)).data;
       var toSend = ''; // to send to Python server
 
       for(var i = 0; i < 10; i++) {
@@ -68,7 +64,8 @@ router.post('/status', function(req, res) {
 
       res.json({ status: "success" });
     } catch(e) {
-      res.json({ status: "fail" });
+      throw e;
+      res.json({ status: "fail", exception: e });
     }
 });
 
