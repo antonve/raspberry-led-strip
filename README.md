@@ -1,6 +1,24 @@
 # raspberry-led-strip
 NMCT Data Communication project: talking to a LED strip with the Raspberry Pi
 
+# Planning
+
+## Week 1
+
+Evaluatie van bestaande libraries en experimenteren met GPIO
+
+## Week 2
+
+Schrijven van een Python-driver
+
+## Week 3
+
+Front-end en webserver
+
+## Week 4
+
+Interactie back-end met front-end en driver, en afwerken
+
 # Verslag
 
 ## Week 1
@@ -104,4 +122,37 @@ Dat werkte, maar we hadden veel problemen. De LEDstrip update niet altijd alle k
 
 ## Week 4
 
+Dit is de laatste week, vandaag werkten we alles af. Het belangrijkste was nu om de front-end mock-up werkend te krijgen. Daarvoor gebruiken we node.js als server op de Raspberry Pi, die web content serveert en XHR requests zal afleveren aan de Python server.
+
+We begonnen met experimenteren hoe we een TCP-connectie konden maken vanuit node.js. Dat bleek erg makkelijk te zijn:
+
+    $ node
+    > var socket = require('net').Socket()
+    > socket.connect(10000)
+    > socket.write('data hier')
+    > socket.end()
+
+En zo zagen we meteen al data aan de Python-kant, node.js was dus een goede kandidaat om de publieke server op te bouwen.
+
+We gebruikten [Express](http://expressjs.com/) als framework bovenop node. Enkele kleine wijzigingen waren nodig aan de Pythonserver (globale status bijhouden van de lichten).
+
+We bleven maar problemen hebben met de Pythondriver. Daarom beslisten we om snel een C-driver te schrijven en die ook te gebruiken. Dat loste al een hoop problemen.
+
+Nu sprak de Pythonserver dus een driver in C aan (gewoon door `os.system`), dat konden we eigenlijk ook in node.js doen, maar daar hadden we geen tijd meer voor. Occasioneel glitcht de LED-strip nog, maar meestal werkt hij perfect.
+
+# Evaluatie
+
+Python was een te trage taal voor dit project, jammer dat we daar zoveel tijd aan verloren hadden. Maar moest de LED-strip aangesloten zijn op de SPI-poort van de Raspberry Pi, zou het volgens ons wel gewerkt hebben.
+
+We hebben veel problemen gehad met timing. De LED-strip glitchte veel en op rare momenten. Dit was heel erg lastig om te debuggen, vooral zonder scope.
+
+Het was ambetant om de ganse tijd te moeten SSHen in de Raspberry Pi, we hadden beter een Sambashare of zo opgezet op de Pi.
+
+Op de een of andere vreemde manier moeten we eerst de node.js server starten, en dan pas de Pythonserver, anders glicht de LEDstrip. Dit is heel raar, omdat die geen interactie met elkaar hebben tot er XHR-requests binnenkomen.
+
+Qua architectuur ziet onze applicatie er zo uit:
+
+    node.js --- XHR request ---> node.js API --- socket ---> Python server --- os.system call ---> C driver --- GPIO libraries ---> LED-strip
+
+Niet ideaal dus. De Pythonserver kunnen we eigenlijk schrappen, en dan kunnen we de C driver aanspreken vanuit node.js. Helaas hebben we daar nu geen tijd meer voor.
 
