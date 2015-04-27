@@ -31,15 +31,59 @@
       </div>
 
       <h3>LED strip</h3>
-      <form action="" id="leds" method="post">
         <div class="row">
-          <div class="col-md-1">
+          <div class="col-md-3">
             <h4>LED0</h4>
-            <input type="text" name="led0[color]" class="color" value="#" />
-            <input type="checkbox" name="led0[status]">
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+       
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+       
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
+          </div>
+          <div class="col-md-3">
+            <h4>LED0</h4>
+            <input type="text" class="color" value="#" />
           </div>
         </div>
-      </form>
+
+
+
     </div> <!-- /container -->
   </body>
 
@@ -47,11 +91,28 @@
   <script src='js/spectrum.js'></script>
 
   <script charset="utf-8">
-    $('.color').spectrum();
-    $('input').change(function() {
-      $.post("ROUTE", {'leds[]': $('#leds').serialize()}, function() {
-        console.log('do something');
-      })
+    var rgbToArray = function(rgb) { return [rgb.r, rgb.g, rgb.b]; };
+
+    var serializeData = function() {
+        return $.map($('.color'), function(el) {
+            return [rgbToArray($(el).spectrum('get').toRgb())]
+        })
+    };
+
+    var postToServer = function() {
+        var toPost = JSON.stringify( { 'data': serializeData() } );
+        $.post("/api/status", { status: toPost }, function() {
+          console.log('do something');
+        });
+      };
+    
+    $('.color').spectrum({
+      flat: true,
+      showButtons: false,
+      dragstop: postToServer
     });
+
+    $('.color').on('dragstop.spectrum', postToServer);
   </script>
 </html>
+
