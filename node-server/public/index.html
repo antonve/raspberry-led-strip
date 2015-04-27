@@ -26,6 +26,7 @@
     <div class="container">
 
       <div class="page-header">
+      <input class="btn btn-default pull-right" id="disco" value="DISCO!!" type="button" />
         <h1>Raspberry Pi LED strip manager</h1>
         <p class="lead">By Thomas &amp; Anton</p>
       </div>
@@ -33,19 +34,19 @@
       <h3>LED strip</h3>
         <div class="row">
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED1</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED2</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED3</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED4</h4>
             <input type="text" class="color" value="#" />
           </div>
        
@@ -53,19 +54,19 @@
 
         <div class="row">
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED5</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED6</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED7</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED8</h4>
             <input type="text" class="color" value="#" />
           </div>
        
@@ -73,15 +74,16 @@
 
         <div class="row">
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED9</h4>
             <input type="text" class="color" value="#" />
           </div>
           <div class="col-md-3">
-            <h4>LED0</h4>
+            <h4>LED10</h4>
             <input type="text" class="color" value="#" />
           </div>
+          <div class="col-md-6">
+          </div>
         </div>
-
 
 
     </div> <!-- /container -->
@@ -113,6 +115,24 @@
     });
 
     $('.color').on('dragstop.spectrum', postToServer);
+
+    var intervalId = 0;
+    $('#disco').click(function() {
+      console.log('disco');
+      if (intervalId == 0) {
+        intervalId = setInterval(function(){
+          $.each($('.color'), function(idx, el) {
+	    console.log(el);
+            $(el).spectrum('set', Math.floor(Math.random()*16777215).toString(16));
+	  });
+	 postToServer();
+	}, 1000);
+      } else {
+        clearInterval(intervalId);
+        intervalId = 0;
+      }
+    });
+
   </script>
 </html>
 
