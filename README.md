@@ -1,6 +1,10 @@
 # raspberry-led-strip
 NMCT Data Communication project: talking to a LED strip with the Raspberry Pi
 
+## Leden
+- [thomastoye](https://github.com/thomastoye)
+- [antonve](https://github.com/antonve)
+
 # Planning
 
 ## Week 1
@@ -49,7 +53,7 @@ BCM lijkt hetzelfde te zijn als GPIO-nummering. De naam komt van de BCM2835-chip
 
 ### WiringPi numbering
 
-[WiringPi](http://wiringpi.com/) is een C-bibliotheek om te interfacen met de GPIO-pinnen. Alsof er nog niet genoeg verwarring was, besloten ze om hun eigen systeem te gebruiken. 
+[WiringPi](http://wiringpi.com/) is een C-bibliotheek om te interfacen met de GPIO-pinnen. Alsof er nog niet genoeg verwarring was, besloten ze om hun eigen systeem te gebruiken.
 
 ### Keuze
 
@@ -61,9 +65,9 @@ We kregen een bakje met daarin een switch, button en de kerstlichtjes aangeslote
 
 Physical numbering | GPIO/BCM numbering | Component      | LED strip connection
 -------------------|--------------------|----------------|---------------------
-7                  | 4                  | LED            | 
-11                 | 17                 | Schakelaar     | 
-12                 | 18                 | Drukknop       | 
+7                  | 4                  | LED            |
+11                 | 17                 | Schakelaar     |
+12                 | 18                 | Drukknop       |
 15                 | 22                 | Groen          | Clock
 16                 | 23                 | Wit            | Data
 
@@ -118,7 +122,7 @@ Om deze library te gebruiken, doe je `sudo python` en dan `import led_driver` (a
 
 In week 3 hebben we gepoogd om een Python daemon op te zetten. De daemon bindt een poort (10000), accepteert alle requests en probeert ze te converteren naar iets dat kan getoond worden op de LEDstrip.
 
-Dat werkte, maar we hadden veel problemen. De LEDstrip update niet altijd alle kleuren. 
+Dat werkte, maar we hadden veel problemen. De LEDstrip update niet altijd alle kleuren.
 
 ## Week 4
 
@@ -155,4 +159,3 @@ Qua architectuur ziet onze applicatie er zo uit:
     node.js --- XHR request ---> node.js API --- socket ---> Python server --- os.system call ---> C driver --- GPIO libraries ---> LED-strip
 
 Niet ideaal dus. De Pythonserver kunnen we eigenlijk schrappen, en dan kunnen we de C driver aanspreken vanuit node.js. Helaas hebben we daar nu geen tijd meer voor.
-
